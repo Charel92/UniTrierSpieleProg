@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class setDeleteCube : MonoBehaviour
 {
@@ -14,13 +15,15 @@ public class setDeleteCube : MonoBehaviour
     private static Renderer renderer;
     public Material[] materials;
     private int activeMaterial;
-
+    public Button[] buttons;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         activeMaterial = 0;
-         
+        buttons[activeMaterial].GetComponent<Image>().color = Color.green;
+
     }
 
     // Update is called once per frame
@@ -35,6 +38,7 @@ public class setDeleteCube : MonoBehaviour
             cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             renderer = cube.gameObject.GetComponent<Renderer>();
             renderer.sharedMaterial = materials[activeMaterial];
+            
 
             //Debug.Log(cam.transform.forward);
             cube.transform.position = new Vector3((int)(transform.position.x + cam.transform.forward.x * 2), (int)(transform.position.y + cam.transform.forward.y * 3), (int)(transform.position.z + cam.transform.forward.z * 2));
@@ -97,11 +101,15 @@ public class setDeleteCube : MonoBehaviour
         }
         if (Input.GetKeyDown("1"))
         {
+            buttons[activeMaterial].GetComponent<Image>().color = Color.white;
             activeMaterial = (activeMaterial - 1) % materials.Length;
+            buttons[activeMaterial].GetComponent<Image>().color = Color.green;
         }
         if (Input.GetKeyDown("2"))
         {
+            buttons[activeMaterial].GetComponent<Image>().color = Color.white;
             activeMaterial = (activeMaterial + 1) % materials.Length;
+            buttons[activeMaterial].GetComponent<Image>().color = Color.green;
         }
 
     }
