@@ -133,4 +133,12 @@ public class setDeleteCube : MonoBehaviour
         }
     }
 
+    public void changeMaterialByClick(int mat)
+    {
+        
+        buttons[activeMaterial].GetComponent<Image>().color = Color.white;
+        activeMaterial = mat;
+        buttons[activeMaterial].GetComponent<Image>().color = Color.green;
+    }
+
 }
