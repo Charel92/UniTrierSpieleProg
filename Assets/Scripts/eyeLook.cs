@@ -19,7 +19,8 @@ public class eyeLook : MonoBehaviour
          Vector2 mouseChange = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
          mouseDirection += mouseChange;
- 
+
+        //AngleAxis(float angle, Vector3 axis);
         this.transform.localRotation = Quaternion.AngleAxis(-mouseDirection.y, Vector3.right);
         player.transform.localRotation = Quaternion.AngleAxis(mouseDirection.x, Vector3.up);
 

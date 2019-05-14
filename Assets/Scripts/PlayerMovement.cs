@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Camera cam;
     public float speed = 5f;
-    public float jumpSpeed = 50f;
+    //public float jumpSpeed = 50f;
     //public BoxCollider col;
     //public LayerMask groundLayers;
 
@@ -34,11 +34,6 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey("a"))
         {
             transform.Translate(new Vector3(-speed * Time.deltaTime, 0,0));
-        }
-
-        if (Input.GetKey("d"))
-        {
-            transform.Translate(new Vector3(speed * Time.deltaTime, 0, 0));
         }
 
         if (Input.GetKey("d"))

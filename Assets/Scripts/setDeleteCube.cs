@@ -12,7 +12,7 @@ public class setDeleteCube : MonoBehaviour
     public Camera cam;
     private Collider[] hitColliders;
     private Vector3 hitVector;
-    private static Renderer renderer;
+    private static Renderer cubeRenderer;
     public Material[] materials;
     private int activeMaterial;
     public Button[] buttons;
@@ -32,12 +32,9 @@ public class setDeleteCube : MonoBehaviour
 
         if (Input.GetKeyDown("q"))
         {
-
-
-
             cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            renderer = cube.gameObject.GetComponent<Renderer>();
-            renderer.sharedMaterial = materials[activeMaterial];
+            cubeRenderer = cube.gameObject.GetComponent<Renderer>();
+            cubeRenderer.sharedMaterial = materials[activeMaterial];
             
 
             //Debug.Log(cam.transform.forward);
@@ -50,7 +47,7 @@ public class setDeleteCube : MonoBehaviour
                 cube.name = "playersCube Nr." + cubes.Count;
 
                 cubes.Add(cube);
-                Debug.Log("set cube with position: " + cube.transform.position);
+                //Debug.Log("set cube with position: " + cube.transform.position);
             }
             else
             {
@@ -66,10 +63,6 @@ public class setDeleteCube : MonoBehaviour
                 }
                 
             }*/
-
-
-
-
         }
 
 
@@ -84,7 +77,6 @@ public class setDeleteCube : MonoBehaviour
                 {
                     if (col.gameObject.layer == 8)
                     {
-                        //deleteCube(col.gameObject);
                         Destroy(col.gameObject);
                     }
 
@@ -94,17 +86,18 @@ public class setDeleteCube : MonoBehaviour
 
         }
 
-
         if (Input.GetKeyDown("y"))
         {
             listAllCubes();
         }
+
         if (Input.GetKeyDown("1"))
         {
-            buttons[activeMaterial].GetComponent<Image>().color = Color.white;
-            activeMaterial = (activeMaterial - 1) % materials.Length;
+            buttons[activeMaterial].GetComponent<Image>().color = Color.white; 
+            activeMaterial = mod((activeMaterial - 1) , materials.Length);
             buttons[activeMaterial].GetComponent<Image>().color = Color.green;
         }
+
         if (Input.GetKeyDown("2"))
         {
             buttons[activeMaterial].GetComponent<Image>().color = Color.white;
@@ -113,7 +106,15 @@ public class setDeleteCube : MonoBehaviour
         }
 
     }
-        private void deleteNullRefs()
+
+    //https://stackoverflow.com/questions/1082917/mod-of-negative-number-is-melting-my-brain
+    private int mod(int x, int m)
+    {
+        int r = x % m;
+        return r < 0 ? r + m : r;
+    }
+
+    private void deleteNullRefs()
     {
         for (int i = 0; i < cubes.Count; i++) {
             if (cubes[i] == null)

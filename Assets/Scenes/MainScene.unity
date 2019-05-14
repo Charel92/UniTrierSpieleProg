@@ -2566,7 +2566,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 963194227}
   speed: 5
-  jumpSpeed: 50
 --- !u!135 &1363635818
 SphereCollider:
   m_ObjectHideFlags: 0
