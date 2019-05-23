@@ -9,27 +9,25 @@ public class GameDataController : MonoBehaviour
     List<GameObject> cubes;
     public SaveData saveData;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown("l"))
-        {
-            player.GetComponent<setDeleteCube>().deleteNullRefs();
-            cubes = player.GetComponent<setDeleteCube>().getCubes();
-            //listAllCubes();
-            //Debug.Log("-----------------------");
-            convertForSerialization();        
-            SaveGame();
 
-        }
 
-        if (Input.GetKeyDown("p"))
-        {
-            LoadData();
-            player.GetComponent<setDeleteCube>().createAllCubesFromSaveData(saveData);
-            //listSaveData();
-        }
+    public void setUpToSave() {
+        player.GetComponent<setDeleteCube>().deleteNullRefs();
+        cubes = player.GetComponent<setDeleteCube>().getCubes();
+        //listAllCubes();
+        //Debug.Log("-----------------------");
+        convertForSerialization();
+        SaveGame();
+
     }
+
+    public void setUpToLoad()
+    {
+        LoadData();
+        player.GetComponent<setDeleteCube>().createAllCubesFromSaveData(saveData);
+        //listSaveData();
+    }
+    
 
     [ContextMenu("Save Data")]
     public void SaveGame()

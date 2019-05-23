@@ -119,11 +119,6 @@ public class setDeleteCube : MonoBehaviour
                 buttons[activeMaterial].GetComponent<Image>().color = Color.green;
             }
 
-            if (Input.GetKeyDown("3"))
-            {
-                deleteAllCubes();
-            }
-
         }
     }
     //https://stackoverflow.com/questions/1082917/mod-of-negative-number-is-melting-my-brain
