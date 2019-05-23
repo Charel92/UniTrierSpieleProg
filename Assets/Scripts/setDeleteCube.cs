@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class setDeleteCube : MonoBehaviour
 {
 
-    List<GameObject> cubes = new List<GameObject>();
+    private List<GameObject> cubes = new List<GameObject>();
     private GameObject cube;
     private float yAngleCamera;
     public Camera cam;
@@ -17,7 +17,12 @@ public class setDeleteCube : MonoBehaviour
     private int activeMaterial;
     public Button[] buttons;
     public InputField textField;
-    
+
+
+    public List<GameObject> getCubes() {
+        return cubes;
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +30,15 @@ public class setDeleteCube : MonoBehaviour
         activeMaterial = 0;
         buttons[activeMaterial].GetComponent<Image>().color = Color.green;
 
+    }
+
+    public int getMaterialIndex(GameObject cube) {
+        cubeRenderer = cube.gameObject.GetComponent<Renderer>();
+        for (int i = 0; i < materials.Length; i++)
+        {
+            if (cubeRenderer.sharedMaterial.Equals(materials[i])) return i;
+        }
+        return 0;
     }
 
     // Update is called once per frame
@@ -38,6 +52,9 @@ public class setDeleteCube : MonoBehaviour
                 cubeRenderer = cube.gameObject.GetComponent<Renderer>();
                 cubeRenderer.sharedMaterial = materials[activeMaterial];
 
+                
+
+
 
                 //Debug.Log(cam.transform.forward);
                 cube.transform.position = new Vector3((int)(transform.position.x + cam.transform.forward.x * 2), (int)(transform.position.y + cam.transform.forward.y * 3), (int)(transform.position.z + cam.transform.forward.z * 2));
@@ -46,7 +63,7 @@ public class setDeleteCube : MonoBehaviour
                 if (hitColliders.Length == 0)
                 {
                     cube.layer = 8;
-                    cube.name = "playersCube Nr." + cubes.Count;
+                    cube.name = "playersCube Nr." + cubes.Count + ":"+activeMaterial;
 
                     cubes.Add(cube);
                     //Debug.Log("set cube with position: " + cube.transform.position);
@@ -88,11 +105,6 @@ public class setDeleteCube : MonoBehaviour
 
             }
 
-            if (Input.GetKeyDown("y"))
-            {
-                listAllCubes();
-            }
-
             if (Input.GetKeyDown("1"))
             {
                 buttons[activeMaterial].GetComponent<Image>().color = Color.white;
@@ -107,6 +119,11 @@ public class setDeleteCube : MonoBehaviour
                 buttons[activeMaterial].GetComponent<Image>().color = Color.green;
             }
 
+            if (Input.GetKeyDown("3"))
+            {
+                deleteAllCubes();
+            }
+
         }
     }
     //https://stackoverflow.com/questions/1082917/mod-of-negative-number-is-melting-my-brain
@@ -116,7 +133,7 @@ public class setDeleteCube : MonoBehaviour
         return r < 0 ? r + m : r;
     }
 
-    private void deleteNullRefs()
+    public void deleteNullRefs()
     {
         for (int i = 0; i < cubes.Count; i++) {
             if (cubes[i] == null)
@@ -126,22 +143,46 @@ public class setDeleteCube : MonoBehaviour
         }
     }
 
-    private void listAllCubes()
-    {
-        Debug.Log("Cube length: " + cubes.Count);
-        for (int i = 0; i < cubes.Count; i++)
-        {
-                if (cubes[i] != null) Debug.Log("cube with index " + i +" : " + cubes[i].name);
-                else Debug.Log("cube with index " + i + " : null");
-        }
-    }
-
     public void changeMaterialByClick(int mat)
     {
         
         buttons[activeMaterial].GetComponent<Image>().color = Color.white;
         activeMaterial = mat;
         buttons[activeMaterial].GetComponent<Image>().color = Color.green;
+    }
+
+
+    public void deleteAllCubes()
+    {
+        foreach (GameObject cube in cubes)
+        {
+            Destroy(cube);
+        }
+        cubes.Clear();
+    }
+
+    public void createAllCubesFromSaveData(SaveData saveData)
+    {
+        deleteAllCubes();
+        GameObject go;
+
+        foreach (CubeData cd in saveData.cubesData)
+        {
+            go = cd.toGameObject();
+            cubeRenderer = go.GetComponent<Renderer>();
+            cubeRenderer.sharedMaterial = materials[cd.materialIndex];
+            cubes.Add(go);
+        }
+    }
+
+    private void listAllCubes()
+    {
+        Debug.Log("Cube length: " + cubes.Count);
+        for (int i = 0; i < cubes.Count; i++)
+        {
+            if (cubes[i] != null) Debug.Log("cube with index " + i + " : " + cubes[i].name);
+            else Debug.Log("cube with index " + i + " : null");
+        }
     }
 
 }
