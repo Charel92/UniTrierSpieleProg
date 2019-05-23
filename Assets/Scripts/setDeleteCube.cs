@@ -16,6 +16,7 @@ public class setDeleteCube : MonoBehaviour
     public Material[] materials;
     private int activeMaterial;
     public Button[] buttons;
+    public InputField textField;
     
 
     // Start is called before the first frame update
@@ -29,84 +30,85 @@ public class setDeleteCube : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetKeyDown("q"))
+        if (!textField.isFocused)
         {
-            cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cubeRenderer = cube.gameObject.GetComponent<Renderer>();
-            cubeRenderer.sharedMaterial = materials[activeMaterial];
-            
-
-            //Debug.Log(cam.transform.forward);
-            cube.transform.position = new Vector3((int)(transform.position.x + cam.transform.forward.x * 2), (int)(transform.position.y + cam.transform.forward.y * 3), (int)(transform.position.z + cam.transform.forward.z * 2));
-            cube.transform.localScale = new Vector3(1, 1, 1);
-            hitColliders = Physics.OverlapBox(cube.transform.position, new Vector3(0.4f, 0.4f, 0.4f));
-            if (hitColliders.Length == 0)
+            if (Input.GetKeyDown("q"))
             {
-                cube.layer = 8;
-                cube.name = "playersCube Nr." + cubes.Count;
-
-                cubes.Add(cube);
-                //Debug.Log("set cube with position: " + cube.transform.position);
-            }
-            else
-            {
-                Destroy(cube);
-            }
+                cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                cubeRenderer = cube.gameObject.GetComponent<Renderer>();
+                cubeRenderer.sharedMaterial = materials[activeMaterial];
 
 
-            /*if (hitCollider.Length != 0)
-            {
-                foreach (Collider col in hitCollider)
+                //Debug.Log(cam.transform.forward);
+                cube.transform.position = new Vector3((int)(transform.position.x + cam.transform.forward.x * 2), (int)(transform.position.y + cam.transform.forward.y * 3), (int)(transform.position.z + cam.transform.forward.z * 2));
+                cube.transform.localScale = new Vector3(1, 1, 1);
+                hitColliders = Physics.OverlapBox(cube.transform.position, new Vector3(0.4f, 0.4f, 0.4f));
+                if (hitColliders.Length == 0)
                 {
-                    Debug.Log("hit with Object: " + col.gameObject.name);
+                    cube.layer = 8;
+                    cube.name = "playersCube Nr." + cubes.Count;
+
+                    cubes.Add(cube);
+                    //Debug.Log("set cube with position: " + cube.transform.position);
                 }
-                
-            }*/
-        }
-
-
-        if (Input.GetKeyDown("e"))
-        {
-            hitVector = new Vector3((int)(transform.position.x + cam.transform.forward.x * 2), (int)(transform.position.y + cam.transform.forward.y * 3), (int)(transform.position.z + cam.transform.forward.z * 2));
-            hitColliders = Physics.OverlapBox(hitVector, new Vector3(0.4f, 0.4f, 0.4f));
-            if (hitColliders.Length > 0)
-            {
-
-                foreach (Collider col in hitColliders)
+                else
                 {
-                    if (col.gameObject.layer == 8)
+                    Destroy(cube);
+                }
+
+
+                /*if (hitCollider.Length != 0)
+                {
+                    foreach (Collider col in hitCollider)
                     {
-                        Destroy(col.gameObject);
+                        Debug.Log("hit with Object: " + col.gameObject.name);
+                    }
+                
+                }*/
+            }
+
+
+            if (Input.GetKeyDown("e"))
+            {
+                hitVector = new Vector3((int)(transform.position.x + cam.transform.forward.x * 2), (int)(transform.position.y + cam.transform.forward.y * 3), (int)(transform.position.z + cam.transform.forward.z * 2));
+                hitColliders = Physics.OverlapBox(hitVector, new Vector3(0.4f, 0.4f, 0.4f));
+                if (hitColliders.Length > 0)
+                {
+
+                    foreach (Collider col in hitColliders)
+                    {
+                        if (col.gameObject.layer == 8)
+                        {
+                            Destroy(col.gameObject);
+                        }
+
                     }
 
                 }
 
             }
 
-        }
+            if (Input.GetKeyDown("y"))
+            {
+                listAllCubes();
+            }
 
-        if (Input.GetKeyDown("y"))
-        {
-            listAllCubes();
-        }
+            if (Input.GetKeyDown("1"))
+            {
+                buttons[activeMaterial].GetComponent<Image>().color = Color.white;
+                activeMaterial = mod((activeMaterial - 1), materials.Length);
+                buttons[activeMaterial].GetComponent<Image>().color = Color.green;
+            }
 
-        if (Input.GetKeyDown("1"))
-        {
-            buttons[activeMaterial].GetComponent<Image>().color = Color.white; 
-            activeMaterial = mod((activeMaterial - 1) , materials.Length);
-            buttons[activeMaterial].GetComponent<Image>().color = Color.green;
-        }
+            if (Input.GetKeyDown("2"))
+            {
+                buttons[activeMaterial].GetComponent<Image>().color = Color.white;
+                activeMaterial = (activeMaterial + 1) % materials.Length;
+                buttons[activeMaterial].GetComponent<Image>().color = Color.green;
+            }
 
-        if (Input.GetKeyDown("2"))
-        {
-            buttons[activeMaterial].GetComponent<Image>().color = Color.white;
-            activeMaterial = (activeMaterial + 1) % materials.Length;
-            buttons[activeMaterial].GetComponent<Image>().color = Color.green;
         }
-
     }
-
     //https://stackoverflow.com/questions/1082917/mod-of-negative-number-is-melting-my-brain
     private int mod(int x, int m)
     {
