@@ -7,14 +7,13 @@ public class Messenger : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField]
-    List<Message> messages=new List<Message>();
+    GameObject controllers;
+    List<MessageObject> messages=new List<MessageObject>();
     public GameObject chatpanel, textObject;
     public InputField textField;
+    public Dropdown dropdown;
+    public MessageObject messageObject;
 
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -32,7 +31,7 @@ public class Messenger : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                sendNewMessage("Spieler 1", textField.text);
+                sendNewMessage(dropdown.options[dropdown.value].text, textField.text);
                 textField.text = "";
             }
         }
@@ -46,36 +45,43 @@ public class Messenger : MonoBehaviour
         
     }
 
-    void sendNewMessage(string name, string text)
+    void sendNewMessage(string to, string content)
     {
-        Message msg = new Message(name,text);
-        //TO-DO
-        printMessage(msg);
+        messageObject = new MessageObject(to, content);
+        controllers.GetComponent<ServerController>().SendMessage(messageObject);
+        printMessage(messageObject);
 
     }
-    void printMessage(Message msg)
+    public void printMessage(MessageObject msg)
     {
         if (messages.Count > 25)
         {
-            Destroy(messages[0].textObject.gameObject);
+            Destroy(messages[0].getTextObject().gameObject);
             messages.Remove(messages[0]);
         }
         GameObject newText = Instantiate(textObject, chatpanel.transform);
-        msg.textObject = newText.GetComponent<Text>();
-        msg.textObject.text = msg.name+": "+msg.text;
+        msg.setTextObject(newText.GetComponent<Text>());
+
+        if (msg.sender != null && !msg.sender.Equals(""))
+        {
+            msg.getTextObject().text = msg.sender + "-> self:"+ msg.content;
+        } else
+        {
+            if (msg.receiver != null && !msg.receiver.Equals(""))
+            {
+                msg.getTextObject().text = "self -> " + msg.receiver + ": " + msg.content;
+            } else
+            {
+                Debug.Log("Printed Message has no receiver and no sender");
+            }
+
+        }
+
         messages.Add(msg);
     }
+
+    
 }
-[System.Serializable]
-public class Message
-{
-    public string name;
-    public string text;
-    public Text textObject;
-    public Message(string name, string text){
-        this.name = name;
-        this.text = text;
-    }
 
 
-}
+
