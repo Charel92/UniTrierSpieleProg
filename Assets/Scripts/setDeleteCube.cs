@@ -17,6 +17,7 @@ public class setDeleteCube : MonoBehaviour
     private int activeMaterial;
     public Button[] buttons;
     public InputField textField;
+    public GameObject player;
 
 
     public List<GameObject> getCubes() {
@@ -177,6 +178,16 @@ public class setDeleteCube : MonoBehaviour
         {
             if (cubes[i] != null) Debug.Log("cube with index " + i + " : " + cubes[i].name);
             else Debug.Log("cube with index " + i + " : null");
+        }
+    }
+    public void translateAllCubesAndPlayer(int x, int y, int z)
+    {
+        Debug.Log("Aendere Position um"+x+y+z);
+        player.transform.position = new Vector3(player.transform.position.x+ x,player.transform.position.y + y, player.transform.position.z + z);
+        for (int i = 0; i < cubes.Count; i++)
+        {
+            // cubes[i].transform.position=new Vector3(cubes[i].transform.position.x+x, cubes[i].transform.position.y + y, cubes[i].transform.position.z + z);
+            
         }
     }
 

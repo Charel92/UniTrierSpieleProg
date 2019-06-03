@@ -4,6 +4,8 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 public class ServerController : MonoBehaviour
 {
@@ -11,7 +13,11 @@ public class ServerController : MonoBehaviour
     private Thread clientReceiveThread;
     private MessageObject messageObject;
     private MessageObject receivedMessage;
+    private MessageObject receivedPosition;
     public GameObject player;
+    public Dictionary<string, string> positions;
+    public List<string> playerList;
+
 
     // Use this for initialization 	
     void Start()
@@ -24,6 +30,18 @@ public class ServerController : MonoBehaviour
         if (receivedMessage != null) {
             player.GetComponent<Messenger>().printMessage(receivedMessage);
             receivedMessage = null;
+        }
+        if (receivedPosition != null)
+        {
+            string[] playercoordinates = receivedPosition.position.Split(',');
+            Debug.Log("X ist " +Int32.Parse(playercoordinates[0]));
+            player.GetComponent<setDeleteCube>().translateAllCubesAndPlayer(Int32.Parse(playercoordinates[0]), Int32.Parse(playercoordinates[1]), Int32.Parse(playercoordinates[2]));
+
+
+            //Debug.Log("Positionen sind: " + receivedPositions.positions.Count);
+            //player.GetComponent<Messenger>().printMessage(receivedMessage);
+            receivedPosition = null;
+
         }
     }
 
@@ -59,7 +77,8 @@ public class ServerController : MonoBehaviour
         try
         {
             socketConnection = new TcpClient("localhost", 4321);
-            SendMessage(new MessageObject("me"));
+            SendMessage(new MessageObject("Superjhemp"));
+            SendMessage(new MessageObject(MessageType.State));
             Byte[] bytes = new Byte[1024];
             while (true)
             {
@@ -85,6 +104,25 @@ public class ServerController : MonoBehaviour
                         if (messageObject.type.Equals("chat"))
                         {
                             receivedMessage = messageObject;
+                        }
+                        if (messageObject.type.Equals("welcome"))
+                        {
+                            receivedPosition = messageObject;
+                        }
+                        if (messageObject.type.Equals("state"))
+                        {
+                            Dictionary<string, string> posMessage = JsonConvert.DeserializeObject<Dictionary<string, string>>(serverMessage);
+
+                            positions = JsonConvert.DeserializeObject<Dictionary<string, string>>(posMessage["positions"]);
+
+                            //Update PlayerList
+                            playerList.Clear();
+                            foreach (KeyValuePair<string,string> pos in positions)
+                            {
+                                playerList.Add(pos.Key);
+                            }
+                            
+                            //receivedPositions = messageObject;
                         }
                     }
                 }
@@ -123,5 +161,10 @@ public class ServerController : MonoBehaviour
         {
             Debug.Log("Socket exception: " + socketException);
         }
+    }
+
+    public void sendGetState()
+    {
+        SendMessage(new MessageObject(MessageType.State));
     }
 }

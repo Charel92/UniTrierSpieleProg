@@ -1,4 +1,5 @@
 ﻿using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class MessageObject
 {
@@ -11,6 +12,7 @@ public class MessageObject
     public bool world = false;
     public string position;
     private Text textObject;
+    public Dictionary<string,string> positions;
 
     //general
 
@@ -28,6 +30,27 @@ public class MessageObject
     {
         type = "hello";
         this.name = name;
+    }
+    public MessageObject(MessageType messageType)
+    {
+
+        switch (messageType)
+        {
+            case MessageType.Chat:
+                type = "hello";
+                break;
+            case MessageType.Hello:
+                type = "hello";
+                break;
+
+            case MessageType.State:
+                type = "getstate";
+                break;
+            default:
+                
+                break;
+        }
+
     }
 
 
@@ -47,3 +70,4 @@ public class MessageObject
         return "type: " + type + " name: " + name + " receiver: " + receiver + " sender: " + sender + " content: " + content + " pos: " + position  + " world: " + world;
     }
 }
+public enum MessageType { Hello, Chat, State };

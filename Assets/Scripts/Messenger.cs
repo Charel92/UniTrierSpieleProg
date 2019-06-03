@@ -79,6 +79,11 @@ public class Messenger : MonoBehaviour
 
         messages.Add(msg);
     }
+    public void updatePlayerList()
+    {
+        dropdown.ClearOptions();
+        dropdown.AddOptions(controllers.GetComponent<ServerController>().playerList);
+    }
 
     
 }
