@@ -76,7 +76,7 @@ public class ServerController : MonoBehaviour
     {
         try
         {
-            socketConnection = new TcpClient("localhost", 4321);
+            socketConnection = new TcpClient("sintar.de", 1234);
             SendMessage(new MessageObject("Superjhemp"));
             SendMessage(new MessageObject(MessageType.State));
             Byte[] bytes = new Byte[1024];
@@ -117,11 +117,23 @@ public class ServerController : MonoBehaviour
 
                             //Update PlayerList
                             playerList.Clear();
+                            GameObject cube;
+                           
                             foreach (KeyValuePair<string,string> pos in positions)
                             {
                                 playerList.Add(pos.Key);
+                                if (!pos.Key.Equals("Superjhemp"))
+                                {
+                                    //string[] playercoordinates = pos.Value.Split(',');
+                                    //cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+
+                                    //cube.transform.position = new Vector3(Int32.Parse(playercoordinates[0]), Int32.Parse(playercoordinates[1]), Int32.Parse(playercoordinates[2]));
+                                }
+                                
                             }
-                            
+
+                           
+
                             //receivedPositions = messageObject;
                         }
                     }
@@ -167,4 +179,5 @@ public class ServerController : MonoBehaviour
     {
         SendMessage(new MessageObject(MessageType.State));
     }
+    
 }
