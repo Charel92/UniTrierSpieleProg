@@ -3159,7 +3159,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1363635816}
+      - m_Target: {fileID: 0}
         m_MethodName: deleteAllCubes
         m_Mode: 1
         m_Arguments:
@@ -5350,8 +5350,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 371254605}
   m_HandleRect: {fileID: 371254604}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
