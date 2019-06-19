@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class setDeleteCube : MonoBehaviour
+public class SetDeleteCube : MonoBehaviour
 {
 
     private List<GameObject> cubes = new List<GameObject>();
     private GameObject cube;
-    private float yAngleCamera;
     public Camera cam;
     private Collider[] hitColliders;
     private Vector3 hitVector;
@@ -18,6 +16,7 @@ public class setDeleteCube : MonoBehaviour
     public Button[] buttons;
     public InputField textField;
     public GameObject player;
+    public Color selectedMatColor = new Color(0.04797081f, 0.9081972f, 0.9245283f,1f);
 
 
     public List<GameObject> getCubes() {
@@ -29,7 +28,7 @@ public class setDeleteCube : MonoBehaviour
     void Start()
     {
         activeMaterial = 0;
-        buttons[activeMaterial].GetComponent<Image>().color = Color.green;
+        buttons[activeMaterial].GetComponent<Image>().color = selectedMatColor;
 
     }
 
@@ -110,14 +109,14 @@ public class setDeleteCube : MonoBehaviour
             {
                 buttons[activeMaterial].GetComponent<Image>().color = Color.white;
                 activeMaterial = mod((activeMaterial - 1), materials.Length);
-                buttons[activeMaterial].GetComponent<Image>().color = Color.green;
+                buttons[activeMaterial].GetComponent<Image>().color = selectedMatColor;
             }
 
             if (Input.GetKeyDown("2"))
             {
                 buttons[activeMaterial].GetComponent<Image>().color = Color.white;
                 activeMaterial = (activeMaterial + 1) % materials.Length;
-                buttons[activeMaterial].GetComponent<Image>().color = Color.green;
+                buttons[activeMaterial].GetComponent<Image>().color = selectedMatColor;
             }
 
         }
@@ -144,7 +143,7 @@ public class setDeleteCube : MonoBehaviour
         
         buttons[activeMaterial].GetComponent<Image>().color = Color.white;
         activeMaterial = mat;
-        buttons[activeMaterial].GetComponent<Image>().color = Color.green;
+        buttons[activeMaterial].GetComponent<Image>().color = selectedMatColor;
     }
 
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class onCollition : MonoBehaviour
+public class OnCollition : MonoBehaviour
 {
     void OnCollisionEnter(Collision col)
     {

@@ -12,8 +12,8 @@ public class GameDataController : MonoBehaviour
 
 
     public void setUpToSave() {
-        player.GetComponent<setDeleteCube>().deleteNullRefs();
-        cubes = player.GetComponent<setDeleteCube>().getCubes();
+        player.GetComponent<SetDeleteCube>().deleteNullRefs();
+        cubes = player.GetComponent<SetDeleteCube>().getCubes();
         //listAllCubes();
         //Debug.Log("-----------------------");
         convertForSerialization();
@@ -24,7 +24,7 @@ public class GameDataController : MonoBehaviour
     public void setUpToLoad()
     {
         LoadData();
-        player.GetComponent<setDeleteCube>().createAllCubesFromSaveData(saveData);
+        player.GetComponent<SetDeleteCube>().createAllCubesFromSaveData(saveData);
         //listSaveData();
     }
     

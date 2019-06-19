@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class MessageObject
 {
-    // Start is called before the first frame update
     public string type;
     public string name;
     public string receiver;

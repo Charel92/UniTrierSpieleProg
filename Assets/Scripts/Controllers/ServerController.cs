@@ -35,7 +35,7 @@ public class ServerController : MonoBehaviour
         {
             string[] playercoordinates = receivedPosition.position.Split(',');
             Debug.Log("X ist " +Int32.Parse(playercoordinates[0]));
-            player.GetComponent<setDeleteCube>().translateAllCubesAndPlayer(Int32.Parse(playercoordinates[0]), Int32.Parse(playercoordinates[1]), Int32.Parse(playercoordinates[2]));
+            player.GetComponent<SetDeleteCube>().translateAllCubesAndPlayer(Int32.Parse(playercoordinates[0]), Int32.Parse(playercoordinates[1]), Int32.Parse(playercoordinates[2]));
 
 
             //Debug.Log("Positionen sind: " + receivedPositions.positions.Count);
