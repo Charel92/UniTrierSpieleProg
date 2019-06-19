@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EyeLook : MonoBehaviour
+public class eyeLook : MonoBehaviour
 {
 
     public Vector2 mouseDirection;
