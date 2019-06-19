@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SetDeleteCube : MonoBehaviour
+public class setDeleteCube : MonoBehaviour
 {
 
     private List<GameObject> cubes = new List<GameObject>();
