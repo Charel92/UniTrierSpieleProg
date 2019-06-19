@@ -4586,7 +4586,7 @@ MonoBehaviour:
   - {fileID: 205146756}
   textField: {fileID: 1620730474}
   player: {fileID: 1363635815}
-  selectedMatColor: {r: 0.047970813, g: 0.90819716, b: 0.9245283, a: 1}
+  selectedMatColor: {r: 0.04797081, g: 0.9081972, b: 0.9245283, a: 1}
 --- !u!114 &1363635817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5350,8 +5350,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 371254605}
   m_HandleRect: {fileID: 371254604}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
