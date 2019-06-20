@@ -18,6 +18,7 @@ public class Messenger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if (!textField.isFocused)
         {
             if (Input.GetKeyDown(KeyCode.M))
@@ -25,7 +26,7 @@ public class Messenger : MonoBehaviour
             sendNewMessage("BOT", "Dies ist eine Testnachricht:"+System.DateTime.Today.ToString("F"));
             }
         }
-
+        */
 
         if (textField.text != "")
         {

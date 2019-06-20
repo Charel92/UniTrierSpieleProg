@@ -76,7 +76,7 @@ public class ServerController : MonoBehaviour
     {
         try
         {
-            socketConnection = new TcpClient("sintar.de", 1234);
+            socketConnection = new TcpClient("localhost", 4321);
             SendMessage(new MessageObject("Superjhemp"));
             SendMessage(new MessageObject(MessageType.State));
             Byte[] bytes = new Byte[1024];
