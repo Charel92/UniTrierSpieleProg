@@ -1,46 +1,31 @@
 ﻿using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class MessageObject
 {
     public string type;
-    public string name;
+    public string position;
     public string receiver;
     public string sender;
     public string content;
     public bool world = false;
-    public string position;
     private Text textObject;
-    public Dictionary<string,string> positions;
 
-    //general
+    public MessageObject()
+    {
 
+    }
 
     //send message
-    public MessageObject(string receiver, string content)
-    {
-        type = "chat";
-        this.receiver = receiver;
-        this.content = content;
-    }
 
-    //hello
-    public MessageObject(string name)
-    {
-        type = "hello";
-        this.name = name;
-    }
+
+
     public MessageObject(MessageType messageType)
     {
 
         switch (messageType)
         {
-            case MessageType.Chat:
-                type = "hello";
-                break;
-            case MessageType.Hello:
-                type = "hello";
-                break;
 
             case MessageType.State:
                 type = "getstate";
@@ -66,7 +51,110 @@ public class MessageObject
 
     public override string ToString()
     {
-        return "type: " + type + " name: " + name + " receiver: " + receiver + " sender: " + sender + " content: " + content + " pos: " + position  + " world: " + world;
+        return "type: " + type;
     }
 }
+
 public enum MessageType { Hello, Chat, State };
+
+public class HelloMessage : MessageObject
+{
+    public string name;
+
+
+    public HelloMessage(string name)
+    {
+        type = "hello";
+        this.name = name;
+    }
+
+    public override string ToString()
+    {
+        return base.ToString() + " name: " + name;
+    }
+
+}
+
+public class WelcomeMessage : MessageObject
+{
+    public WelcomeMessage(string position)
+    {
+        type = "welcome";
+        this.position = position;
+    }
+
+    public WelcomeMessage(MessageObject msg)
+    {
+        type = "welcome";
+        position = msg.position;
+
+    }
+
+    public override string ToString()
+    {
+        return base.ToString()+ " pos: " + position;
+    }
+
+}
+
+public class ChatMessage : MessageObject
+{
+
+    public ChatMessage(string receiver, string sender, string content)
+    {
+        type = "chat";
+        this.receiver = receiver;
+        this.content = content;
+        this.sender = sender;
+    }
+
+    public ChatMessage(MessageObject msg)
+    {
+        type = "chat";
+        sender = msg.sender;
+        content = msg.content;
+        world = msg.world;
+    }
+
+    public override string ToString()
+    {
+        return base.ToString() + " receiver: " + receiver + " sender: " + sender + " content: " + content + " world: " + world;
+    }
+
+
+
+}
+
+
+public class GetStateMessage : MessageObject
+{
+    public GetStateMessage()
+    {
+        type = "getstate";
+
+    }
+}
+
+public class StateMessage : MessageObject
+{
+
+    public List<string> playerList = new List<string>();
+    public Dictionary<string, string> positions;
+
+    public StateMessage(Dictionary<string, string> positions)
+    {
+        type = "state";
+        this.positions = positions;
+        updatePlayersInPlayerList();
+    }
+
+    private void updatePlayersInPlayerList()
+    {
+        
+        if (playerList != null && playerList.Count > 0) playerList.Clear();
+        foreach (KeyValuePair<string, string> pos in positions)
+        {
+            playerList.Add(pos.Key);
+        }
+    }
+}

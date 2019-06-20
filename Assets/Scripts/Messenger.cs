@@ -12,7 +12,7 @@ public class Messenger : MonoBehaviour
     public GameObject chatpanel, textObject;
     public InputField textField;
     public Dropdown dropdown;
-    public MessageObject messageObject;
+    public ChatMessage messageObject;
 
 
     // Update is called once per frame
@@ -48,12 +48,12 @@ public class Messenger : MonoBehaviour
 
     void sendNewMessage(string to, string content)
     {
-        messageObject = new MessageObject(to, content);
+        messageObject = new ChatMessage(to,"", content);
         controllers.GetComponent<ServerController>().SendMessage(messageObject);
         printMessage(messageObject);
 
     }
-    public void printMessage(MessageObject msg)
+    public void printMessage(ChatMessage msg)
     {
         if (messages.Count > 25)
         {
@@ -80,10 +80,10 @@ public class Messenger : MonoBehaviour
 
         messages.Add(msg);
     }
-    public void updatePlayerList()
+    public void updatePlayerList(List<string> playerList)
     {
         dropdown.ClearOptions();
-        dropdown.AddOptions(controllers.GetComponent<ServerController>().playerList);
+        dropdown.AddOptions(playerList);
     }
 
     

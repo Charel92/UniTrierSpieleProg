@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -178,9 +179,25 @@ public class setDeleteCube : MonoBehaviour
             else Debug.Log("cube with index " + i + " : null");
         }
     }
+
+
+    public void createAndSetCubesToPosition(Dictionary<string, string> positions)
+    {
+        GameObject sphere;
+        foreach (KeyValuePair<string, string> pos in positions)
+        {
+            if (!pos.Key.Equals(Globals.name))
+            {
+                string[] playercoordinates = pos.Value.Split(',');
+                sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                sphere.transform.position = new Vector3(Int32.Parse(playercoordinates[0]), Int32.Parse(playercoordinates[1]), Int32.Parse(playercoordinates[2]));
+            }
+
+        }
+    }
     public void translateAllCubesAndPlayer(int x, int y, int z)
     {
-        Debug.Log("Aendere Position um"+x+y+z);
+        //Debug.Log("Aendere Position um"+x+y+z);
         player.transform.position = new Vector3(player.transform.position.x+ x,player.transform.position.y + y, player.transform.position.z + z);
         for (int i = 0; i < cubes.Count; i++)
         {
