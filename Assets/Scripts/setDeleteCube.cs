@@ -181,7 +181,7 @@ public class setDeleteCube : MonoBehaviour
     }
 
 
-    public void createAndSetCubesToPosition(Dictionary<string, string> positions)
+    public void createAndSetSpheresToPosition(Dictionary<string, string> positions)
     {
         GameObject sphere;
         foreach (KeyValuePair<string, string> pos in positions)
@@ -191,8 +191,12 @@ public class setDeleteCube : MonoBehaviour
                 string[] playercoordinates = pos.Value.Split(',');
                 sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 sphere.transform.position = new Vector3(Int32.Parse(playercoordinates[0]), Int32.Parse(playercoordinates[1]), Int32.Parse(playercoordinates[2]));
+                hitColliders = Physics.OverlapSphere(sphere.transform.position, 0.8f);
+                if (hitColliders.Length != 0)
+                {
+                    Destroy(sphere);
+                }
             }
-
         }
     }
     public void translateAllCubesAndPlayer(int x, int y, int z)

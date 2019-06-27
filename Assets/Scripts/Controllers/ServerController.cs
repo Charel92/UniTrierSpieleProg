@@ -41,7 +41,7 @@ public class ServerController : MonoBehaviour
         if (receivedStateMessage != null)
         {
             player.GetComponent<Messenger>().updatePlayerList(receivedStateMessage.playerList);
-            player.GetComponent<setDeleteCube>().createAndSetCubesToPosition(receivedStateMessage.positions);
+            player.GetComponent<setDeleteCube>().createAndSetSpheresToPosition(receivedStateMessage.positions);
             receivedStateMessage = null;
         }
     }
@@ -49,7 +49,7 @@ public class ServerController : MonoBehaviour
     /// <summary> 	
     /// Setup socket connection. 	
     /// </summary> 	
-    private void ConnectToTcpServer()
+    public void ConnectToTcpServer()
     {
         try
         {
