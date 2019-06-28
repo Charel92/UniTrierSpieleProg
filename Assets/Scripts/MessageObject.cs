@@ -5,10 +5,10 @@ using UnityEngine;
 public class MessageObject
 {
     public string type;
-    public string position;
-    public string receiver;
-    public string sender;
-    public string content;
+    public string position ="";
+    public string receiver ="";
+    public string sender ="";
+    public string content ="";
     public bool world = false;
     private Text textObject;
 
@@ -158,3 +158,49 @@ public class StateMessage : MessageObject
         }
     }
 }
+
+public class StateOfCubesFromClientMessage : MessageObject
+{
+    public Dictionary<string, string> cubes; //position,mat
+
+    public StateOfCubesFromClientMessage()
+    {
+        type = "stateofcubes";
+        cubes = new Dictionary<string, string>();
+    }
+
+    public void addCube(GameObject cube)
+    {
+        string pos = cube.transform.position.x + "," + cube.transform.position.y + "," + cube.transform.position.z;
+        cubes.Add(cubes.Count.ToString(), pos);
+    }
+}
+
+public class GetStateOfCubesMessage : MessageObject
+{
+    public Dictionary<string, string> cubes;
+
+    public GetStateOfCubesMessage()
+    {
+        type = "getstateofcubes";
+    }
+}
+
+public class StateOfCubesFromServerMessage : MessageObject
+{
+    public Dictionary<string, string> cubes; //position,mat
+
+    public StateOfCubesFromServerMessage(Dictionary<string, string> cubes)
+    {
+        type = "stateofcubes";
+        this.cubes = cubes;
+    }
+
+    public void addCube(GameObject cube)
+    {
+        string pos = cube.transform.position.x + "," + cube.transform.position.y + "," + cube.transform.position.z;
+        cubes.Add(cubes.Count.ToString(), pos);
+    }
+}
+
+

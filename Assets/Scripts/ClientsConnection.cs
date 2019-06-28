@@ -17,10 +17,7 @@ public class ClientsConnection : MonoBehaviour
     {
            try
            {
-            clientReceiveThread = new Thread(new ThreadStart(ListenForData)); 
-            clientReceiveThread.IsBackground = true;
-            clientReceiveThread.Start();
-            clientReceiveThreads.Add(clientReceiveThread);
+            ThreadPool.QueueUserWorkItem(ListenForData);
             Debug.Log("connected to Server");
            }
            catch (Exception e)
@@ -31,7 +28,7 @@ public class ClientsConnection : MonoBehaviour
     }
 
 
-    private void ListenForData()
+    private void ListenForData(System.Object stateInfo)
     {
         try
         {

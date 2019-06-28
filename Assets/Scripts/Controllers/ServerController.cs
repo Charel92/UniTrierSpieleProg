@@ -15,6 +15,7 @@ public class ServerController : MonoBehaviour
     private ChatMessage receivedChatMessage;
     private WelcomeMessage receivedWelcomeMessage;
     private StateMessage receivedStateMessage;
+    private StateOfCubesFromServerMessage receivedStateofCubesFromServerMessage;
     public GameObject player;
 
 
@@ -43,6 +44,12 @@ public class ServerController : MonoBehaviour
             player.GetComponent<Messenger>().updatePlayerList(receivedStateMessage.playerList);
             player.GetComponent<setDeleteCube>().createAndSetSpheresToPosition(receivedStateMessage.positions);
             receivedStateMessage = null;
+        }
+
+        if (receivedStateofCubesFromServerMessage != null)
+        {
+            player.GetComponent<setDeleteCube>().loadCubesFromPositions(receivedStateofCubesFromServerMessage.cubes);
+            receivedStateofCubesFromServerMessage = null;
         }
     }
 
@@ -118,6 +125,13 @@ public class ServerController : MonoBehaviour
                             Dictionary<string, string> posMessage = JsonConvert.DeserializeObject<Dictionary<string, string>>(serverMessage);
                             receivedStateMessage = new StateMessage(JsonConvert.DeserializeObject<Dictionary<string, string>>(posMessage["positions"]));
                         }
+
+                        if (receivedMessage.type.Equals("stateofcubes"))
+                        {
+                            Debug.Log("receivedStateOfCubesMessage");
+                            Dictionary<string, string> posMessage = JsonConvert.DeserializeObject<Dictionary<string, string>>(serverMessage);
+                            receivedStateofCubesFromServerMessage = new StateOfCubesFromServerMessage(JsonConvert.DeserializeObject<Dictionary<string, string>>(posMessage["cubes"]));
+                        }
                     }
                 }
             }
@@ -141,7 +155,7 @@ public class ServerController : MonoBehaviour
             NetworkStream stream = socketConnection.GetStream();
             if (stream.CanWrite)
             {
-                string message = JsonUtility.ToJson(messageObject) + '\n';
+                string message = JsonConvert.SerializeObject(messageObject) + '\n';
                 // Convert string message to byte array.                 
                 byte[] clientMessageAsByteArray = Encoding.UTF8.GetBytes(message);
                 // Write byte array to socketConnection stream.                 
@@ -157,7 +171,12 @@ public class ServerController : MonoBehaviour
 
     public void sendGetState()
     {
-        SendMessage(new MessageObject(MessageType.State));
+        SendMessage(new GetStateMessage());
     }
-    
+
+    public void sendGetStateOfCubes()
+    {
+        SendMessage(new GetStateOfCubesMessage());
+    }
+
 }

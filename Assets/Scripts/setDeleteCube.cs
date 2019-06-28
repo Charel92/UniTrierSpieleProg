@@ -18,6 +18,7 @@ public class setDeleteCube : MonoBehaviour
     public InputField textField;
     public GameObject player;
     public Color selectedMatColor = new Color(0.04797081f, 0.9081972f, 0.9245283f,1f);
+    public GameObject controllers;
 
 
     public List<GameObject> getCubes() {
@@ -42,7 +43,18 @@ public class setDeleteCube : MonoBehaviour
         return 0;
     }
 
-    // Update is called once per frame
+    
+
+
+    private void setAndCreateCubeToPosition(Vector3 pos)
+    {
+        cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube.layer = 8;
+        cube.transform.localScale = new Vector3(1, 1, 1);
+        cube.transform.position = pos;
+        cubes.Add(cube);
+    }
+
     void Update()
     {
         if (!textField.isFocused)
@@ -164,8 +176,11 @@ public class setDeleteCube : MonoBehaviour
         foreach (CubeData cd in saveData.cubesData)
         {
             go = cd.toGameObject();
-            cubeRenderer = go.GetComponent<Renderer>();
-            cubeRenderer.sharedMaterial = materials[cd.materialIndex];
+            if (cd.materialIndex != -1) //cube has no texture
+            {
+                cubeRenderer = go.GetComponent<Renderer>();
+                cubeRenderer.sharedMaterial = materials[cd.materialIndex];
+            }
             cubes.Add(go);
         }
     }
@@ -210,4 +225,29 @@ public class setDeleteCube : MonoBehaviour
         }
     }
 
+    //send the position of the cubes in the game to the server
+    public void sendStateOfCubesToServer()
+    {
+        deleteNullRefs();
+        StateOfCubesFromClientMessage sendCubeMessage = new StateOfCubesFromClientMessage();
+        foreach (GameObject cube in cubes){
+            sendCubeMessage.addCube(cube);
+        }
+        controllers.GetComponent<ServerController>().SendMessage(sendCubeMessage);
+    }
+
+
+    //show the cubes with the positions received from the server
+    //textures were not saved
+    public void loadCubesFromPositions(Dictionary<string, string> cubes)
+    {
+        deleteAllCubes();
+
+        foreach (KeyValuePair<string, string> pos in cubes)
+        {
+            string[] cubecoordinates = pos.Value.Split(',');
+            Vector3 vectorPos = new Vector3(Int32.Parse(cubecoordinates[0]), Int32.Parse(cubecoordinates[1]), Int32.Parse(cubecoordinates[2]));
+            setAndCreateCubeToPosition(vectorPos);
+        }
+    }
 }
