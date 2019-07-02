@@ -71,7 +71,7 @@ public class GameDataController : MonoBehaviour
         saveData.cubesData = new List<CubeData>();
         foreach (GameObject gm in cubes)
         {
-            saveData.cubesData.Add(new CubeData(gm));
+            saveData.cubesData.Add(new CubeData(gm, player.GetComponent<setDeleteCube>().getMaterialIndex(gm)));
         }    
     }
 

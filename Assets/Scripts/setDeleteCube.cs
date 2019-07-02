@@ -25,8 +25,6 @@ public class setDeleteCube : MonoBehaviour
         return cubes;
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         activeMaterial = 0;
@@ -38,9 +36,9 @@ public class setDeleteCube : MonoBehaviour
         cubeRenderer = cube.gameObject.GetComponent<Renderer>();
         for (int i = 0; i < materials.Length; i++)
         {
-            if (cubeRenderer.sharedMaterial.Equals(materials[i])) return i;
+            if (cubeRenderer.sharedMaterial.Equals(materials[i])) return i; 
         }
-        return 0;
+        return -1;
     }
 
     
@@ -59,6 +57,13 @@ public class setDeleteCube : MonoBehaviour
     {
         if (!textField.isFocused)
         {
+
+            //for tests
+            /*if (Input.GetKeyDown("3"))
+            {
+                getCubesRendererMatIndex();
+            }*/
+
             if (Input.GetKeyDown("q"))
             {
                 cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -75,7 +80,7 @@ public class setDeleteCube : MonoBehaviour
                 if (hitColliders.Length == 0)
                 {
                     cube.layer = 8;
-                    cube.name = "playersCube Nr." + cubes.Count + ":"+activeMaterial;
+                    cube.name = "playersCube Nr." + cubes.Count;
 
                     cubes.Add(cube);
                     //Debug.Log("set cube with position: " + cube.transform.position);

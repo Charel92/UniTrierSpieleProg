@@ -20,17 +20,20 @@ public struct CubeData
     public float posY;
     public float posZ;
 
-    public CubeData (GameObject cube)
+    public CubeData (GameObject cube, int matIndex)
     {
         id = cube.name;
         name = cube.name;
 
-        Regex regex = new Regex("^[0-9]*$");
+        /*Regex regex = new Regex("^[0-9]*$");
         if (regex.IsMatch(cube.name[cube.name.Length - 1].ToString()))
         {
             materialIndex = Int32.Parse(cube.name[cube.name.Length - 1].ToString());
         }
         else materialIndex = -1;
+        */
+
+        materialIndex = matIndex;
         posX = cube.transform.position.x;
         posY = cube.transform.position.y;
         posZ = cube.transform.position.z;
