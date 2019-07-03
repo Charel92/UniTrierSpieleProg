@@ -1,6 +1,8 @@
 ﻿using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using Newtonsoft.Json;
 
 public class MessageObject
 {
@@ -173,7 +175,7 @@ public class StateOfCubesFromClientMessage : MessageObject
 
     public void addCube(GameObject cubePos, int cubeMatIndex)
     {
-        string pos = cubePos.transform.position.x + "," + cubePos.transform.position.y + "," + cubePos.transform.position.z;
+        string pos = Globals.PositionToString(cubePos.transform.position);
         cubesPositions.Add(cubesPositions.Count.ToString(), pos);
         cubesMatIndexes.Add(cubesMatIndexes.Count.ToString(), cubeMatIndex);
     }
@@ -198,12 +200,52 @@ public class StateOfCubesFromServerMessage : MessageObject
         type = "stateofcubes";
         this.cubes = cubes;
     }
+}
 
-    /*public void addCube(GameObject cube)
+public class AddCubeFromClientMessage : MessageObject
+{
+    public string matIndex;
+
+    public AddCubeFromClientMessage(string position, string sender, string matIndex)
     {
-        string pos = cube.transform.position.x + "," + cube.transform.position.y + "," + cube.transform.position.z;
-        cubes.Add(cubes.Count.ToString(), pos);
-    }*/
+        type = "addCube";
+        this.position = position;
+        this.sender = sender;
+        this.matIndex = matIndex;
+    }
+}
+
+public class AddCubeFromServerMessage : MessageObject
+{
+    public ReceivedCubeFromServer cube;
+
+    public AddCubeFromServerMessage(string position, string matIndex, string owner)
+    {
+        type = "addCube";
+        cube = new ReceivedCubeFromServer(position, Int32.Parse(matIndex),owner);
+    }
+}
+
+public class RemoveCubeFromClientMessage : MessageObject
+{
+
+    public RemoveCubeFromClientMessage(string position, string sender)
+    {
+        type = "removeCube";
+        this.position = position;
+        this.sender = sender;
+    }
+}
+
+public class RemoveCubeFromServerMessage : MessageObject
+{
+    public ReceivedCubeFromServer cube;
+
+    public RemoveCubeFromServerMessage(string position)
+    {
+        type = "removeCube";
+        cube = new ReceivedCubeFromServer(position);
+    }
 }
 
 
@@ -213,10 +255,32 @@ public class ReceivedCubeFromServer
     public string owner;
     public int matIndex;
 
+    [JsonConstructor]
+    public ReceivedCubeFromServer(string position, int matIndex, string owner)
+    {
+        this.position = position;
+        this.matIndex = matIndex;
+        this.owner = owner;
+    }
+
+    public ReceivedCubeFromServer(string position, int matIndex)
+    {
+        this.position = position;
+        this.matIndex = matIndex;
+    }
+
+    public ReceivedCubeFromServer(string position)
+    {
+        this.position = position;
+    }
+
+
     public override string ToString()
     {
         return "position: " + position + " owner: " + owner + " matIndex: " + matIndex;
     }
 }
+
+
 
 

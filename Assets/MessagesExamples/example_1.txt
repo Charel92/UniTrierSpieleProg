@@ -1,0 +1,3 @@
+{ "type" : "hello", "name" : "cmd" }
+{"matIndex":"1","type":"addCube","position":"0,0,1","sender":"cmd"}
+{"type":"removeCube","position":"0,0,1","sender":"cmd"}

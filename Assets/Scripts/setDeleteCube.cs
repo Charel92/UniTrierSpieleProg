@@ -72,10 +72,6 @@ public class setDeleteCube : MonoBehaviour
                 cubeRenderer = cube.gameObject.GetComponent<Renderer>();
                 cubeRenderer.sharedMaterial = materials[activeMaterial];
 
-                
-
-
-
                 cube.transform.position = new Vector3((int)(transform.position.x + cam.transform.forward.x * 2), (int)(transform.position.y + cam.transform.forward.y * 3), (int)(transform.position.z + cam.transform.forward.z * 2));
                 cube.transform.localScale = new Vector3(1, 1, 1);
                 hitColliders = Physics.OverlapBox(cube.transform.position, new Vector3(0.4f, 0.4f, 0.4f));
@@ -85,6 +81,8 @@ public class setDeleteCube : MonoBehaviour
                     cube.name = "playersCube Nr." + cubes.Count;
 
                     cubes.Add(cube);
+                    controllers.GetComponent<ServerController>().SendMessage(
+                        new AddCubeFromClientMessage(Globals.PositionToString(cube.transform.position),Globals.name,activeMaterial.ToString()));
                     //Debug.Log("set cube with position: " + cube.transform.position);
                 }
                 else
@@ -116,6 +114,8 @@ public class setDeleteCube : MonoBehaviour
                         if (col.gameObject.layer == 8)
                         {
                             Destroy(col.gameObject);
+                            controllers.GetComponent<ServerController>().SendMessage(
+                        new RemoveCubeFromClientMessage(Globals.PositionToString(col.gameObject.transform.position), Globals.name));
                         }
 
                     }
@@ -210,7 +210,7 @@ public class setDeleteCube : MonoBehaviour
         {
             if (!pos.Key.Equals(Globals.name))
             {
-                string[] playercoordinates = pos.Value.Split(',');
+                string[] playercoordinates = Globals.SplitPositionString(pos.Value);
                 sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 sphere.transform.position = new Vector3(Int32.Parse(playercoordinates[0]), Int32.Parse(playercoordinates[1]), Int32.Parse(playercoordinates[2]));
                 hitColliders = Physics.OverlapSphere(sphere.transform.position, 0.8f);
@@ -254,10 +254,31 @@ public class setDeleteCube : MonoBehaviour
 
         foreach (ReceivedCubeFromServer cube in cubes)
         {
-            string[] cubecoordinates = cube.position.Split(',');
+            string[] cubecoordinates = Globals.SplitPositionString(cube.position);
             Vector3 vectorPos = new Vector3(Int32.Parse(cubecoordinates[0]), Int32.Parse(cubecoordinates[1]), Int32.Parse(cubecoordinates[2]));
             
             setAndCreateCubeToPosition(vectorPos,cube.matIndex,cube.owner);
+        }
+    }
+
+    public void createCube(ReceivedCubeFromServer cubeFromServer)
+    {
+        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube.name = "cube from " + cubeFromServer.owner;
+        Renderer cubeRenderer = cube.gameObject.GetComponent<Renderer>();
+        cube.transform.position = Globals.SplitPositionStringToVector(cubeFromServer.position);
+        cubeRenderer.sharedMaterial = materials[cubeFromServer.matIndex];
+        cube.transform.localScale = new Vector3(1, 1, 1);
+        //cubes.Add(cube);
+    }
+
+    public void deleteCube(ReceivedCubeFromServer cubeFromServer)
+    {
+        hitVector =Globals.SplitPositionStringToVector(cubeFromServer.position);
+        hitColliders = Physics.OverlapBox(hitVector, new Vector3(0.4f, 0.4f, 0.4f));
+        if (hitColliders.Length > 0)
+        {
+            foreach (Collider col in hitColliders) Destroy(col.gameObject);
         }
     }
 }

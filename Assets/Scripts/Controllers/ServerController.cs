@@ -16,6 +16,8 @@ public class ServerController : MonoBehaviour
     private WelcomeMessage receivedWelcomeMessage;
     private StateMessage receivedStateMessage;
     private StateOfCubesFromServerMessage receivedStateofCubesFromServerMessage;
+    private AddCubeFromServerMessage receivedAddCubeFromServerMessage;
+    private RemoveCubeFromServerMessage receivedRemoveCubeFromServerMessage;
     public GameObject player;
 
 
@@ -50,6 +52,18 @@ public class ServerController : MonoBehaviour
         {
             player.GetComponent<setDeleteCube>().loadCubesFromPositions(receivedStateofCubesFromServerMessage.cubes);
             receivedStateofCubesFromServerMessage = null;
+        }
+
+        if (receivedAddCubeFromServerMessage != null)
+        {
+            player.GetComponent<setDeleteCube>().createCube(receivedAddCubeFromServerMessage.cube);
+            receivedAddCubeFromServerMessage = null;
+        }
+
+        if (receivedRemoveCubeFromServerMessage != null)
+        {
+            player.GetComponent<setDeleteCube>().deleteCube(receivedRemoveCubeFromServerMessage.cube);
+            receivedRemoveCubeFromServerMessage = null;
         }
     }
 
@@ -131,6 +145,20 @@ public class ServerController : MonoBehaviour
                             Dictionary<string, string> posMessage = JsonConvert.DeserializeObject<Dictionary<string, string>>(serverMessage);
                             List<ReceivedCubeFromServer> receivedCubesFromServer = JsonConvert.DeserializeObject<List<ReceivedCubeFromServer>>(posMessage["cubes"]);
                             receivedStateofCubesFromServerMessage = new StateOfCubesFromServerMessage(receivedCubesFromServer);
+                        }
+
+                        if (receivedMessage.type.Equals("addCube"))
+                        {
+                            //Debug.Log("receivedStateOfCubesMessage");
+                            Dictionary<string, string> posMessage = JsonConvert.DeserializeObject<Dictionary<string, string>>(serverMessage);
+                            receivedAddCubeFromServerMessage = new AddCubeFromServerMessage(posMessage["position"],posMessage["matIndex"], posMessage["owner"]);
+                        }
+
+                        if (receivedMessage.type.Equals("removeCube"))
+                        {
+                            //Debug.Log("receivedStateOfCubesMessage");
+                            Dictionary<string, string> posMessage = JsonConvert.DeserializeObject<Dictionary<string, string>>(serverMessage);
+                            receivedRemoveCubeFromServerMessage = new RemoveCubeFromServerMessage(posMessage["position"]);
                         }
                     }
                 }
