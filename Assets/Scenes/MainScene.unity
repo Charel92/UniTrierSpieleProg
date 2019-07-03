@@ -1698,7 +1698,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &410634634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4053,7 +4053,6 @@ MonoBehaviour:
   - {fileID: 331058819}
   - {fileID: 962687816}
   - {fileID: 984031000}
-  - {fileID: 410634634}
   - {fileID: 484201118}
 --- !u!1 &1019187677
 GameObject:
@@ -5956,8 +5955,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 371254605}
   m_HandleRect: {fileID: 371254604}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.5
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6574,7 +6573,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Get Cubes from Server
+  m_Text: Load Cubes from Server
 --- !u!222 &1727232473
 CanvasRenderer:
   m_ObjectHideFlags: 0
