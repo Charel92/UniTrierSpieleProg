@@ -44,12 +44,14 @@ public class setDeleteCube : MonoBehaviour
     
 
 
-    private void setAndCreateCubeToPosition(Vector3 pos)
+    private void setAndCreateCubeToPosition(Vector3 pos,int matIndex, string owner)
     {
         cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.layer = 8;
+        if (owner.Equals(Globals.name))cube.layer = 8;
         cube.transform.localScale = new Vector3(1, 1, 1);
         cube.transform.position = pos;
+        cubeRenderer = cube.gameObject.GetComponent<Renderer>();
+        cubeRenderer.sharedMaterial = materials[matIndex];
         cubes.Add(cube);
     }
 
@@ -230,13 +232,15 @@ public class setDeleteCube : MonoBehaviour
         }
     }
 
-    //send the position of the cubes in the game to the server
+    //send the position,name and matIndex of the cubes in the game to the server
     public void sendStateOfCubesToServer()
     {
         deleteNullRefs();
         StateOfCubesFromClientMessage sendCubeMessage = new StateOfCubesFromClientMessage();
+        sendCubeMessage.sender = Globals.name;
         foreach (GameObject cube in cubes){
-            sendCubeMessage.addCube(cube);
+            //created by player
+            if (cube.layer == 8) sendCubeMessage.addCube(cube, getMaterialIndex(cube));
         }
         controllers.GetComponent<ServerController>().SendMessage(sendCubeMessage);
     }
@@ -244,15 +248,16 @@ public class setDeleteCube : MonoBehaviour
 
     //show the cubes with the positions received from the server
     //textures were not saved
-    public void loadCubesFromPositions(Dictionary<string, string> cubes)
+    public void loadCubesFromPositions(List<ReceivedCubeFromServer> cubes)
     {
         deleteAllCubes();
 
-        foreach (KeyValuePair<string, string> pos in cubes)
+        foreach (ReceivedCubeFromServer cube in cubes)
         {
-            string[] cubecoordinates = pos.Value.Split(',');
+            string[] cubecoordinates = cube.position.Split(',');
             Vector3 vectorPos = new Vector3(Int32.Parse(cubecoordinates[0]), Int32.Parse(cubecoordinates[1]), Int32.Parse(cubecoordinates[2]));
-            setAndCreateCubeToPosition(vectorPos);
+            
+            setAndCreateCubeToPosition(vectorPos,cube.matIndex,cube.owner);
         }
     }
 }

@@ -87,7 +87,6 @@ public class ServerController : MonoBehaviour
             socketConnection = new TcpClient(Globals.ip, Globals.port);
             SendMessage(new HelloMessage(Globals.name));
             SendMessage(new GetStateMessage());
-            //SendMessage(new MessageObject(MessageType.State));
             Byte[] bytes = new Byte[1024];
             while (true)
             {
@@ -112,25 +111,26 @@ public class ServerController : MonoBehaviour
                         if (receivedMessage.type.Equals("chat"))
                         {
                             receivedChatMessage = new ChatMessage(receivedMessage);
-                            Debug.Log("receivedChatMessage: " + receivedChatMessage);
+                            //Debug.Log("receivedChatMessage: " + receivedChatMessage);
                         }
                         if (receivedMessage.type.Equals("welcome"))
                         {
                             receivedWelcomeMessage = new WelcomeMessage(receivedMessage);
-                            Debug.Log("receivedWelcomeMessage: " + receivedMessage);
+                            //Debug.Log("receivedWelcomeMessage: " + receivedMessage);
                         }
                         if (receivedMessage.type.Equals("state"))
                         {
-                            Debug.Log("receivedStateMessage");
+                            //Debug.Log("receivedStateMessage");
                             Dictionary<string, string> posMessage = JsonConvert.DeserializeObject<Dictionary<string, string>>(serverMessage);
                             receivedStateMessage = new StateMessage(JsonConvert.DeserializeObject<Dictionary<string, string>>(posMessage["positions"]));
                         }
 
                         if (receivedMessage.type.Equals("stateofcubes"))
                         {
-                            Debug.Log("receivedStateOfCubesMessage");
+                            //Debug.Log("receivedStateOfCubesMessage");
                             Dictionary<string, string> posMessage = JsonConvert.DeserializeObject<Dictionary<string, string>>(serverMessage);
-                            receivedStateofCubesFromServerMessage = new StateOfCubesFromServerMessage(JsonConvert.DeserializeObject<Dictionary<string, string>>(posMessage["cubes"]));
+                            List<ReceivedCubeFromServer> receivedCubesFromServer = JsonConvert.DeserializeObject<List<ReceivedCubeFromServer>>(posMessage["cubes"]);
+                            receivedStateofCubesFromServerMessage = new StateOfCubesFromServerMessage(receivedCubesFromServer);
                         }
                     }
                 }

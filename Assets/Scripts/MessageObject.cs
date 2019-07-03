@@ -161,18 +161,21 @@ public class StateMessage : MessageObject
 
 public class StateOfCubesFromClientMessage : MessageObject
 {
-    public Dictionary<string, string> cubes; //position,mat
+    public Dictionary<string, string> cubesPositions; //position
+    public Dictionary<string, int> cubesMatIndexes; //MatIndex
 
     public StateOfCubesFromClientMessage()
     {
         type = "stateofcubes";
-        cubes = new Dictionary<string, string>();
+        cubesPositions = new Dictionary<string, string>();
+        cubesMatIndexes = new Dictionary<string, int>();
     }
 
-    public void addCube(GameObject cube)
+    public void addCube(GameObject cubePos, int cubeMatIndex)
     {
-        string pos = cube.transform.position.x + "," + cube.transform.position.y + "," + cube.transform.position.z;
-        cubes.Add(cubes.Count.ToString(), pos);
+        string pos = cubePos.transform.position.x + "," + cubePos.transform.position.y + "," + cubePos.transform.position.z;
+        cubesPositions.Add(cubesPositions.Count.ToString(), pos);
+        cubesMatIndexes.Add(cubesMatIndexes.Count.ToString(), cubeMatIndex);
     }
 }
 
@@ -188,18 +191,31 @@ public class GetStateOfCubesMessage : MessageObject
 
 public class StateOfCubesFromServerMessage : MessageObject
 {
-    public Dictionary<string, string> cubes; //position,mat
+    public List<ReceivedCubeFromServer> cubes; //position,mat
 
-    public StateOfCubesFromServerMessage(Dictionary<string, string> cubes)
+    public StateOfCubesFromServerMessage(List<ReceivedCubeFromServer> cubes)
     {
         type = "stateofcubes";
         this.cubes = cubes;
     }
 
-    public void addCube(GameObject cube)
+    /*public void addCube(GameObject cube)
     {
         string pos = cube.transform.position.x + "," + cube.transform.position.y + "," + cube.transform.position.z;
         cubes.Add(cubes.Count.ToString(), pos);
+    }*/
+}
+
+
+public class ReceivedCubeFromServer
+{
+    public string position;
+    public string owner;
+    public int matIndex;
+
+    public override string ToString()
+    {
+        return "position: " + position + " owner: " + owner + " matIndex: " + matIndex;
     }
 }
 
